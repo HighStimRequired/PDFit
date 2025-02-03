@@ -1,7 +1,5 @@
 # PDFit
- Convert (*almost*) ANYTHING into a PDF
-
- PDFit is a Python-based application with a sleek dark-themed GUI designed to convert a wide range of file types to PDF with minimal user effort.
+ Convert (*almost*) ANYTHING into a PDF! PDFit is a Python-based application with a sleek dark-themed GUI designed to convert a wide range of file types to PDF with minimal user effort.
  
  
 ````markdown
