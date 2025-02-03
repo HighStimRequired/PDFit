@@ -4,7 +4,7 @@
  
 ````markdown
 
-Quick PDF Converter is a Python-based application with a sleek dark-themed GUI designed to convert a wide range of file types to PDF with minimal user effort.
+PDFit is a Python-based application with a sleek dark-themed GUI designed to convert a wide range of file types to PDF with minimal user effort.
 
 ## Features
 
