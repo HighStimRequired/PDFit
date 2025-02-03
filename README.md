@@ -24,7 +24,6 @@
 - **LibreOffice:** Ensure it's installed and added to your system PATH.
 ````
 ## Installation
-
 1. Clone the repository:
    ```bash
    git clone https://github.com/yourusername/pdfit.git
