@@ -1,11 +1,10 @@
 # PDFit
- Convert ANYTHING into a PDF
+ Convert (*almost*) ANYTHING into a PDF
  
  
 ````markdown
-# Quick PDF Converter
 
-Quick PDF Converter is a Python-based application with a sleek dark-themed GUI designed to convert a wide range of file types to PDF with minimal user effort.
+PDFit is a Python-based application with a sleek dark-themed GUI designed to convert a wide range of file types to PDF with minimal user effort.
 
 ## Features
 
@@ -31,12 +30,12 @@ Quick PDF Converter is a Python-based application with a sleek dark-themed GUI d
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/quick-pdf-converter.git
+   git clone https://github.com/yourusername/pdfit.git
 ````
 
 2. Navigate to the project directory:
    ```bash
-   cd quick-pdf-converter
+   cd pdfit
    ```
 3. Install the required Python packages:
    ```bash
@@ -47,7 +46,7 @@ Quick PDF Converter is a Python-based application with a sleek dark-themed GUI d
 
 1. Run the application:
    ```bash
-   python quick_pdf_converter.py
+   python pdfit.py
    ```
 2. Use the GUI to browse and select a file.
 3. Click **Convert to PDF**. The output PDF will be saved in the same directory as the original file.
