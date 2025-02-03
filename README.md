@@ -1,5 +1,5 @@
 # PDFit
- Convert ANYTHING into a PDF
+ Convert (*almost*) ANYTHING into a PDF
  
  
 ````markdown
