@@ -1,1 +1,0 @@
-Assume the role of an Expert Python Developer. Create a program (with a GUI/Interface) that quickly converts almost any file into a pdf. The theme should be dark, with some nice accent colors in the light-ish blue range. Focus on minimal user effort and efficiency of task execution within the program.

@@ -1,0 +1,6 @@
+Assume the role of an Expert Python Developer. Create a program (with a GUI/Interface) that quickly converts almost any file into a pdf. The theme should be dark, with some nice accent colors in the light-ish blue range. Focus on minimal user effort and efficiency of task execution within the program.
+
+Can we add the ability to choose the output directory?
+
+Can we reduce the padding to make the app more compact but still comfy? Also let's take a look at our layout since we added in a new feature and see if there is a better way to implement everything.
+

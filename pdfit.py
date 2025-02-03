@@ -2,10 +2,7 @@ import sys
 import os
 import subprocess
 from PyQt5 import QtWidgets, QtGui, QtCore
-
-# For image conversion to PDF
 from PIL import Image
-# For text conversion to PDF
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 
@@ -13,13 +10,13 @@ class PDFConverter(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Quick PDF Converter")
-        self.setGeometry(100, 100, 500, 300)
+        self.setGeometry(100, 100, 480, 130)
         self.setStyleSheet(self.dark_theme())
         self.initUI()
 
     def dark_theme(self):
         """
-        Returns a stylesheet string for a dark-themed UI with light blue accents.
+        Returns a compact dark-themed stylesheet with light blue accents.
         """
         return """
         QWidget {
@@ -31,59 +28,69 @@ class PDFConverter(QtWidgets.QMainWindow):
         QPushButton {
             background-color: #3498db;
             border: none;
-            padding: 10px;
-            border-radius: 5px;
+            padding: 6px 10px;
+            border-radius: 4px;
         }
         QPushButton:hover {
             background-color: #5dade2;
         }
         QLineEdit {
             background-color: #3c3c3c;
-            border: 1px solid #555555;
-            padding: 5px;
+            border: 1px solid #555;
+            padding: 4px;
             border-radius: 3px;
         }
         QLabel {
-            padding: 5px;
+            padding: 2px;
         }
         """
 
     def initUI(self):
         """
-        Initializes the main UI components.
+        Initializes a compact UI using a QGridLayout.
         """
         central_widget = QtWidgets.QWidget()
         self.setCentralWidget(central_widget)
-        layout = QtWidgets.QVBoxLayout()
 
-        # Instruction Label
-        self.label = QtWidgets.QLabel("Select a file to convert to PDF:")
-        layout.addWidget(self.label)
+        grid = QtWidgets.QGridLayout()
+        grid.setContentsMargins(10, 10, 10, 10)  # Reduced margins
+        grid.setSpacing(8)  # Reduced spacing between widgets
 
-        # File path display (read-only)
+        # Row 0: File selection
+        file_label = QtWidgets.QLabel("Select File:")
+        grid.addWidget(file_label, 0, 0)
         self.file_path_edit = QtWidgets.QLineEdit()
         self.file_path_edit.setReadOnly(True)
-        layout.addWidget(self.file_path_edit)
-
-        # Browse Button
+        grid.addWidget(self.file_path_edit, 0, 1)
         self.browse_button = QtWidgets.QPushButton("Browse")
         self.browse_button.clicked.connect(self.browse_file)
-        layout.addWidget(self.browse_button)
+        grid.addWidget(self.browse_button, 0, 2)
 
-        # Convert Button
+        # Row 1: Output directory selection
+        out_label = QtWidgets.QLabel("Output Directory:")
+        grid.addWidget(out_label, 1, 0)
+        self.out_dir_edit = QtWidgets.QLineEdit()
+        self.out_dir_edit.setReadOnly(True)
+        grid.addWidget(self.out_dir_edit, 1, 1)
+        self.out_browse_button = QtWidgets.QPushButton("Browse")
+        self.out_browse_button.clicked.connect(self.browse_output_directory)
+        grid.addWidget(self.out_browse_button, 1, 2)
+
+        # Row 2: Convert button (centered)
         self.convert_button = QtWidgets.QPushButton("Convert to PDF")
         self.convert_button.clicked.connect(self.convert_file)
-        layout.addWidget(self.convert_button)
+        grid.addWidget(self.convert_button, 2, 0, 1, 3, alignment=QtCore.Qt.AlignCenter)
 
-        # Status Label for feedback
+        # Row 3: Status label
         self.status_label = QtWidgets.QLabel("")
-        layout.addWidget(self.status_label)
+        self.status_label.setWordWrap(True)
+        grid.addWidget(self.status_label, 3, 0, 1, 3)
 
-        central_widget.setLayout(layout)
+        central_widget.setLayout(grid)
 
     def browse_file(self):
         """
-        Opens a file dialog for the user to select a file.
+        Opens a file dialog for selecting the file to convert.
         """
         file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
             self, "Select File", "", "All Files (*.*)"
@@ -91,6 +98,15 @@ class PDFConverter(QtWidgets.QMainWindow):
         if file_path:
             self.file_path_edit.setText(file_path)
             self.status_label.setText("File selected.")
+
+    def browse_output_directory(self):
+        """
+        Opens a directory dialog for selecting the output directory.
+        """
+        directory = QtWidgets.QFileDialog.getExistingDirectory(self, "Select Output Directory")
+        if directory:
+            self.out_dir_edit.setText(directory)
+            self.status_label.setText("Output directory selected.")
 
     def convert_file(self):
         """
@@ -112,10 +128,11 @@ class PDFConverter(QtWidgets.QMainWindow):
 
     def convert_to_pdf(self, file_path):
         """
-        Determines the file type and routes the conversion accordingly.
+        Determines the file type and routes conversion accordingly.
+        Uses the chosen output directory if provided, else defaults to the file's directory.
         """
         ext = os.path.splitext(file_path)[1].lower()
-        output_dir = os.path.dirname(file_path)
+        output_dir = self.out_dir_edit.text() if self.out_dir_edit.text() else os.path.dirname(file_path)
         base_name = os.path.splitext(os.path.basename(file_path))[0]
         output_pdf = os.path.join(output_dir, base_name + ".pdf")
 
@@ -126,11 +143,9 @@ class PDFConverter(QtWidgets.QMainWindow):
         elif ext in ['.html', '.htm']:
             self.html_to_pdf(file_path, output_pdf)
         elif ext in ['.docx', '.doc', '.odt', '.xls', '.xlsx', '.ppt', '.pptx']:
-            # Use LibreOffice for office documents
             self.libreoffice_convert(file_path, output_dir)
             output_pdf = os.path.join(output_dir, base_name + ".pdf")
         else:
-            # Attempt a conversion via LibreOffice for other types
             self.libreoffice_convert(file_path, output_dir)
             output_pdf = os.path.join(output_dir, base_name + ".pdf")
 
@@ -167,7 +182,6 @@ class PDFConverter(QtWidgets.QMainWindow):
     def html_to_pdf(self, html_path, output_pdf):
         """
         Converts an HTML file to a PDF using pdfkit.
-        Note: Ensure that pdfkit and wkhtmltopdf are installed and configured.
         """
         try:
             import pdfkit
@@ -177,8 +191,7 @@ class PDFConverter(QtWidgets.QMainWindow):
 
     def libreoffice_convert(self, file_path, output_dir):
         """
-        Converts a file to PDF using LibreOffice's headless conversion.
-        Make sure LibreOffice is installed and added to your system PATH.
+        Converts a file to PDF using LibreOffice's headless mode.
         """
         command = [
             'libreoffice', '--headless', '--convert-to', 'pdf', '--outdir',
